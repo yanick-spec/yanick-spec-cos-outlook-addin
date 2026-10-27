@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CoS Drafts – TEST manifest. Loads the pane from the test repo (cos-outlook-addin-test),
+  so changes can be tried in Outlook before they reach the live add-in. See SECURITY.md.
+  BASE URL: https://yanick-spec.github.io/cos-outlook-addin-test
+  If you host the files elsewhere, replace every occurrence of that URL below.
+-->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+           xsi:type="MailApp">
+  <Id>772e629d-794b-44c4-afaf-7e72fb57a11e</Id>
+  <Version>1.1.0.0</Version>
+  <ProviderName>Yanick Rosenbaum</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="CoS Drafts (Test)"/>
+  <Description DefaultValue="Draft email replies in Yanick's chief-of-staff style with Claude."/>
+  <IconUrl DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/assets/icon-v2-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/assets/icon-v2-128.png"/>
+  <SupportUrl DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/"/>
+  <AppDomains>
+    <AppDomain>https://api.anthropic.com</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/taskpane.html"/>
+        <RequestedHeight>250</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/taskpane.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.3">
+        <bt:Set Name="Mailbox"/>
+      </bt:Sets>
+    </Requirements>
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+
+          <!-- Button when reading a mail -->
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="cosReadGroup">
+                <Label resid="Group.Label"/>
+                <Control xsi:type="Button" id="cosReadButton">
+                  <Label resid="Button.Label"/>
+                  <Supertip>
+                    <Title resid="Button.Label"/>
+                    <Description resid="ReadButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+
+          <!-- Button inside a reply / new mail window -->
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="cosComposeGroup">
+                <Label resid="Group.Label"/>
+                <Control xsi:type="Button" id="cosComposeButton">
+                  <Label resid="Button.Label"/>
+                  <Supertip>
+                    <Title resid="Button.Label"/>
+                    <Description resid="ComposeButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/assets/icon-v2-16.png"/>
+        <bt:Image id="Icon.32" DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/assets/icon-v2-32.png"/>
+        <bt:Image id="Icon.80" DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/assets/icon-v2-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://yanick-spec.github.io/cos-outlook-addin-test/commands.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="Group.Label" DefaultValue="Chief of Staff (Test)"/>
+        <bt:String id="Button.Label" DefaultValue="Draft (Test)"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="ReadButton.Tooltip" DefaultValue="Let Claude draft a reply to this mail in your CoS style. Opens it as a reply you edit and send yourself."/>
+        <bt:String id="ComposeButton.Tooltip" DefaultValue="Let Claude write this reply in your CoS style and insert it into the draft."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
